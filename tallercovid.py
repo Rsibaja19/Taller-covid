@@ -153,3 +153,48 @@ data.groupby(['Nombre municipio', 'Ubicación del caso']).size()
 
 #Liste el promedio de edad por sexo por cada ciudad de contagiados
 data.groupby(['Nombre municipio', 'Sexo'])['Edad'].mean()
+
+#Grafique las curvas de contagio, muerte y recuperación de toda Colombia acumulados
+data[(data['Recuperado'] == 'Recuperado')].groupby('Fecha de diagnóstico').size().plot()
+
+data[(data['Estado'] == 'Fallecido')].groupby('Fecha de diagnóstico').size().plot()
+
+#Grafique las curvas de contagio, muerte y recuperación de los 10 departamentos con mas casos de contagiados acumulados
+aux = data[(data['Estado'] == 'Fallecido')].groupby('Nombre departamento').size()
+
+aux.sort_values(ascending=False).head(10).plot()
+
+aux = data[(data['Recuperado'] == 'Recuperado')].groupby('Nombre departamento').size()
+
+aux.sort_values(ascending=False).head(10).plot()
+
+#Grafique las curvas de contagio, muerte y recuperación de las 10 ciudades con mas casos de contagiados acumulados
+aux = data[(data['Estado'] == 'Fallecido')].groupby('Nombre municipio').size()
+
+aux.sort_values(ascending=False).head(10).plot()
+
+aux = data[(data['Recuperado'] == 'Recuperado')].groupby('Nombre municipio').size()
+
+aux.sort_values(ascending=False).head(10).plot()
+
+#Liste de mayor a menor la cantidad de fallecidos por edad en toda Colombia.
+aux = data[(data['Estado'] == 'Fallecido')].groupby('Edad').size()
+
+aux.sort_values(ascending=False).head(10)
+
+#Liste el porcentaje de personas por atención de toda Colombia
+data.groupby('Ubicación del caso').mean()
+
+#Haga un gráfico de barras por atención de toda Colombia
+data.groupby('Ubicación del caso').size().plot(kind='bar')
+
+#Haga un gráfico de barras por Sexo de toda Colombia
+data.groupby('Sexo').size().plot(kind='bar')
+
+#Haga un gráfico de barras por tipo de toda Colombia
+data.groupby('Tipo de contagio').size().plot(kind='bar')
+
+#Haga un gráfico de barras del número de contagiados, recuperados y fallecidos por fecha de toda Colombia
+data[(data['Recuperado'] == 'Recuperado')].groupby('Fecha de diagnóstico').size().plot(kind='bar')
+
+data[(data['Estado'] == 'Fallecido')].groupby('Fecha de diagnóstico').size().plot(kind='bar')
