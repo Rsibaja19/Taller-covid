@@ -93,3 +93,63 @@ aux.sort_values(ascending=False).head(10)
 aux = data[(data['Recuperado'] == 'Recuperado')].groupby('Nombre municipio').size()
 
 aux.sort_values(ascending=False).head(10)
+
+#Liste agrupado por departamento y en orden de Mayor a menor las ciudades con mas casos de contagiados
+aux = data.groupby(['Nombre departamento', 'Nombre municipio']).size()
+
+aux.sort_values(ascending=False)
+
+#Número de Mujeres y hombres contagiados por ciudad por departamento
+aux = data.groupby(['Nombre departamento', 'Nombre municipio', 'Sexo']).size()
+
+aux.sort_values(ascending=False)
+
+#Liste el promedio de edad de contagiados por hombre y mujeres por ciudad por departamento
+data.groupby(['Nombre departamento', 'Nombre municipio', 'Sexo'])['Edad'].mean()
+
+#Liste de mayor a menor el número de contagiados por país de procedencia
+aux = data.groupby(['Nombre del país']).size()
+
+aux.sort_values(ascending=False)
+
+#Liste de mayor a menor las fechas donde se presentaron mas contagios
+aux = data.groupby(['Fecha de diagnóstico']).size()
+
+aux.sort_values(ascending=False)
+
+#Diga cual es la tasa de mortalidad y recuperación que tiene toda Colombia
+cantidad_muertes = data[data['Estado'] == 'Fallecido'].shape[0]
+cantidad_recuperados = data.query('Recuperado == "Recuperado"').shape[0]
+cantidad_casos = data.shape[0]
+
+tasa_mortalidad = cantidad_muertes / cantidad_casos * 100
+
+tasa_recuperacion = cantidad_recuperados / cantidad_casos * 100
+
+#Liste la tasa de mortalidad y recuperación que tiene cada departamento
+cantidad_muertes_dep = data[data['Estado'] == 'Fallecido'].groupby('Nombre departamento').size()
+cantidad_recuperados_dep = data[data['Recuperado'] == 'Recuperado'].groupby('Nombre departamento').size()
+cantidad_casos_dep = data.groupby('Nombre departamento').size()
+
+tasa_mortalidad_dep = cantidad_muertes_dep / cantidad_casos_dep * 100
+
+tasa_recuperacion_dep = cantidad_recuperados_dep / cantidad_casos_dep * 100
+
+data2 = pd.DataFrame({'tasa_mortalidad_dep': tasa_mortalidad_dep, 'tasa_recuperacion_dep':tasa_recuperacion_dep})
+
+#Liste la tasa de mortalidad y recuperación que tiene cada ciudad
+cantidad_muertes_ciu = data[data['Estado'] == 'Fallecido'].groupby('Nombre municipio').size()
+cantidad_recuperados_ciu = data[data['Recuperado'] == 'Recuperado'].groupby('Nombre municipio').size()
+cantidad_casos_ciu = data.groupby('Nombre municipio').size()
+
+tasa_mortalidad_ciu = cantidad_muertes_ciu / cantidad_casos_ciu * 100
+
+tasa_recuperacion_ciu = cantidad_recuperados_ciu / cantidad_casos_ciu * 100
+
+data3 = pd.DataFrame({'tasa_mortalidad_ciu': tasa_mortalidad_ciu, 'tasa_recuperacion_ciu':tasa_recuperacion_ciu})
+
+#Liste por cada ciudad la cantidad de personas por atención
+data.groupby(['Nombre municipio', 'Ubicación del caso']).size()
+
+#Liste el promedio de edad por sexo por cada ciudad de contagiados
+data.groupby(['Nombre municipio', 'Sexo'])['Edad'].mean()
